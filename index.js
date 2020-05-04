@@ -2,10 +2,20 @@ const express = require('express'); //Import Express มาไว้ใช้
 const app = express(); // สร้่าง Express App ขึ้นมา
 const db = require('./models')
 const studentRoutes = require("./routes/student")
+const cors = require('cors');
+const userRoutes = require("./routes/user");
 
 
+
+require("./config/passport/passport"); 
+// เป็นการบอกให้ passport สร้าง strategy ทั้งหมดที่เราเขียนไว้
+
+
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false}))
+
+
 
 // app.get('/hello', (req, res) => {
 //   res.send("Hello world");
@@ -24,6 +34,7 @@ app.use(express.urlencoded({ extended: false}))
 // })
 
 app.use("/students", studentRoutes);
+app.use("/users", userRoutes)
 
 
 db.sequelize.sync().then(() => {
