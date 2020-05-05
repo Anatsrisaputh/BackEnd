@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 const registerUser = async (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
+  const name = req.body.name;
 
   const user = await db.User.findOne({ where: {username}});
   if (user) {
@@ -15,7 +16,8 @@ const registerUser = async (req, res) => {
 
     await db.User.create({
       username: username,
-      password: hashedPassword
+      password: hashedPassword,
+      name: name
     });
 
     res.status(201).send({ message: "User created."});
@@ -35,7 +37,8 @@ const loginUser = async (req, res) => {
 
     if (isSuccess) {
       const payload = {
-        id: user.id
+        id: user.id,
+        name: user.name
       }
 
       const token = jwt.sign(payload, "codecamp5", {expiresIn: 3600})
